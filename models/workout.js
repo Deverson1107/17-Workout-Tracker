@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+//Basic model framework for every workout.
 const WorkoutSchema = new Schema({
   day: Date,
   exercises: [

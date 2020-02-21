@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
+//connection code for heroku deployment.
 var MONGODB_URI = process.env.MONGODB_URL || "mongodb://localhost/workout";
 const options = {
   useNewUrlParser: true,
@@ -20,6 +21,7 @@ const options = {
 };
 mongoose.connect(MONGODB_URI, options);
 
+//basic GET routes
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.join(__dirname + "./public/index.html"));
 });
@@ -32,6 +34,7 @@ app.get("/stats", (req, res) => {
   res.status(200).sendFile(path.join(__dirname + "/public/stats.html"));
 });
 
+//list for all workout items
 app.get("/api/workouts", (req, res) => {
   db.Workout.find({})
     .then(dbWorkout => {
@@ -42,6 +45,7 @@ app.get("/api/workouts", (req, res) => {
     });
 });
 
+//workout items by their id
 app.get("/:id", (req, res) => {
   let query = req.params.id;
   Workout.find({
@@ -55,6 +59,7 @@ app.get("/:id", (req, res) => {
     });
 });
 
+//workout items by their range
 app.get("/api/workouts/range", (req, res) => {
   Workout.find({})
     .then(dbWorkout => {
@@ -65,6 +70,7 @@ app.get("/api/workouts/range", (req, res) => {
     });
 });
 
+//POST route for creating new workout items
 app.post("/api/workouts", (req, res) => {
   const day = new Date().setDate(new Date().getDate() - 10);
   const name = req.body.name;
@@ -91,14 +97,16 @@ app.post("/api/workouts", (req, res) => {
     .catch(err => res.status(400).json("Error: " + err));
 });
 
+//PUT route for updating existing workouts
 app.put("/api/workouts/:id", ({ body, params }, res) => {
   console.log("Hello", params);
 
-  Workout.findByIdAndUpdate(params.id, { $push: { exercises: body } })
-  .then(workouts => {
-    console.log("NEW TEST", workouts);
-    res.json(workouts);
-  });
+  Workout.findByIdAndUpdate(params.id, { $push: { exercises: body } }).then(
+    workouts => {
+      console.log("NEW TEST", workouts);
+      res.json(workouts);
+    }
+  );
 });
 
 app.listen(PORT, () => {
