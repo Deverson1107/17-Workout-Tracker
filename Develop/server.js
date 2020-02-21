@@ -11,10 +11,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+var MONGODB_URI = process.env.MONGODB_URL || "mongodb://localhost/workout";
+const options = {
   useNewUrlParser: true,
-  useFindAndModify: false
-});
+  useCreateIndex: true,
+  useFindAndModify: false,
+  family: 4
+};
+mongoose.connect(MONGODB_URI, options);
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.join(__dirname + "./public/index.html"));
