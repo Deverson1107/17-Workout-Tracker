@@ -42,6 +42,65 @@ app.get("/api/workouts", (req, res) => {
     });
 });
 
+app.get("/:id", (req, res) => {
+  let query = req.params.id;
+  Workout.find({
+    request: query
+  })
+    .then(dbWorkout => {
+      res.json(dbWorkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+app.get("/api/workouts/range", (req, res) => {
+  Workout.find({})
+    .then(dbWorkout => {
+      res.json(dbWorkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+});
+
+app.post("/api/workouts", (req, res) => {
+  const day = new Date().setDate(new Date().getDate() - 10);
+  const name = req.body.name;
+  const totalDuration = req.body.duration;
+  const weight = req.body.weight;
+  const reps = req.body.reps;
+  const sets = req.body.sets;
+  const distance = req.body.distance;
+
+  const newWorkout = new Workout({
+    day,
+    name,
+    totalDuration,
+    weight,
+    reps,
+    sets,
+    distance
+  });
+
+  console.log("new workout", newWorkout);
+  newWorkout
+    .save()
+    .then(() => res.json("Exercise added!"))
+    .catch(err => res.status(400).json("Error: " + err));
+});
+
+app.put("/api/workouts/:id", ({ body, params }, res) => {
+  console.log("Hello", params);
+
+  Workout.findByIdAndUpdate(params.id, { $push: { exercises: body } })
+  .then(workouts => {
+    console.log("NEW TEST", workouts);
+    res.json(workouts);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
 });
