@@ -3,17 +3,49 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 //Basic model framework for every workout.
+// const WorkoutSchema = new Schema({
+//   day: Date,
+//   exercises: [
+//     {
+//       formtype: String,
+//       name: String,
+//       totalDuration: Number,
+//       weight: Number,
+//       reps: Number,
+//       sets: Number,
+//       distance: Number
+//     }
+//   ]
+// });
+
 const WorkoutSchema = new Schema({
-  day: Date,
+  day: {
+    type: Date,
+    default: Date.now
+  },
   exercises: [
     {
-      formtype: String,
-      name: String,
-      totalDuration: Number,
-      weight: Number,
-      reps: Number,
-      sets: Number,
-      distance: Number
+      type: {
+        type: String
+      },
+      name: {
+        type: String
+      },
+      duration: {
+        type: Number
+      },
+      weight: {
+        type: Number
+      },
+      reps: {
+        type: Number
+      },
+      sets: {
+        type: Number
+      },
+      distance: {
+        type: Number
+      }
     }
   ]
 });
