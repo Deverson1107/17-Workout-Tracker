@@ -1,6 +1,10 @@
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+var mongodb = require("mongodb");
+var MongoClient = mongodb.MongoClient;
+
+var url = "mongodb://root:kaiju0790@ds359847.mlab.com:59847/heroku_t1k0847c";
 require("dotenv");
 
 const PORT = process.env.PORT || 3000;
@@ -22,7 +26,13 @@ const options = {
   useUnifiedTopology: true,
   family: 4
 };
-mongoose.connect(MONGODB_URI, options);
+mongoose.connect(url, function(err, db) {
+  if (err) {
+    console.log("Unable to connect to the mongoDB server. Error:", err);
+  } else {
+    console.log("Connection established to", url);
+  }
+});
 
 // Requiring our routes
 require("./routes/html-routes.js")(app);
