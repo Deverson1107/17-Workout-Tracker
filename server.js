@@ -26,7 +26,7 @@ const options = {
   useUnifiedTopology: true,
   family: 4
 };
-mongoose.connect(url, function(err, db) {
+MongoClient.connect(url, function(err, db) {
   if (err) {
     console.log("Unable to connect to the mongoDB server. Error:", err);
   } else {
