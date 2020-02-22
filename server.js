@@ -1,8 +1,17 @@
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+require("dotenv");
 
 const PORT = process.env.PORT || 3000;
+
+// const db = require("./models/index");
+const app = express();
+// const seeder = require("./seeders/seed");
+app.use(logger("dev"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
 
 //connection code for heroku deployment.
 var MONGODB_URI = process.env.MONGODB_URL || "mongodb://localhost/workout";
@@ -14,14 +23,6 @@ const options = {
   family: 4
 };
 mongoose.connect(MONGODB_URI, options);
-
-// const db = require("./models/index");
-const app = express();
-// const seeder = require("./seeders/seed");
-app.use(logger("dev"));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static("public"));
 
 // Requiring our routes
 require("./routes/html-routes.js")(app);
